@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tg-bg: #FBFAF7;
+  --tg-text: #0F172A;
+  --tg-hint: #64748B;
+  --tg-button: #D97706;
+  --tg-button-text: #FFFFFF;
+  --tg-secondary-bg: #F1EFE9;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+h1, h2, h3, .font-display {
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
+/* focus visibility for accessibility */
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid #D97706;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---------- PRINT / PDF STYLES (used for Lebenslauf export) ---------- */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 16mm;
+  }
+  html, body {
+    background: #fff !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #cv-print-root, #cv-print-root * {
+    visibility: visible;
+  }
+  #cv-print-root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
