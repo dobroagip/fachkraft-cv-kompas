@@ -103,11 +103,15 @@ function JobEntryForm({ initial, onSave, onCancel }) {
             maxLength="7"
             value={draft.periodFrom}
             onChange={(e) => {
-              let val = e.target.value.replace(/[^\d-]/g, '');
+              const val = e.target.value.replace(/[^\d-]/g, '');
+              setDraft((d) => ({ ...d, periodFrom: val }));
+            }}
+            onBlur={(e) => {
+              const val = e.target.value.replace(/[^\d-]/g, '');
               if (val.length >= 4 && val[4] !== '-' && val.length > 4) {
-                val = val.slice(0, 4) + '-' + val.slice(4);
+                const formatted = val.slice(0, 4) + '-' + val.slice(4, 6);
+                setDraft((d) => ({ ...d, periodFrom: formatted }));
               }
-              setDraft((d) => ({ ...d, periodFrom: val.slice(0, 7) }));
             }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
           />
@@ -123,11 +127,15 @@ function JobEntryForm({ initial, onSave, onCancel }) {
             value={draft.periodTo}
             disabled={draft.current}
             onChange={(e) => {
-              let val = e.target.value.replace(/[^\d-]/g, '');
+              const val = e.target.value.replace(/[^\d-]/g, '');
+              setDraft((d) => ({ ...d, periodTo: val }));
+            }}
+            onBlur={(e) => {
+              const val = e.target.value.replace(/[^\d-]/g, '');
               if (val.length >= 4 && val[4] !== '-' && val.length > 4) {
-                val = val.slice(0, 4) + '-' + val.slice(4);
+                const formatted = val.slice(0, 4) + '-' + val.slice(4, 6);
+                setDraft((d) => ({ ...d, periodTo: formatted }));
               }
-              setDraft((d) => ({ ...d, periodTo: val.slice(0, 7) }));
             }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"
           />

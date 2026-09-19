@@ -215,7 +215,10 @@ function EducationEntryForm({ initial, onSave, onCancel }) {
                 placeholder="2018"
                 maxLength="4"
                 value={draft.periodFrom}
-                onChange={(e) => setDraft((d) => ({ ...d, periodFrom: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, '');
+                  setDraft((d) => ({ ...d, periodFrom: val }));
+                }}
                 className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
               />
             </label>
@@ -229,7 +232,10 @@ function EducationEntryForm({ initial, onSave, onCancel }) {
                 maxLength="4"
                 value={draft.periodTo}
                 disabled={draft.current}
-                onChange={(e) => setDraft((d) => ({ ...d, periodTo: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, '');
+                  setDraft((d) => ({ ...d, periodTo: val }));
+                }}
                 className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"
               />
             </label>
