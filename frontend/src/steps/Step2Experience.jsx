@@ -103,15 +103,19 @@ function JobEntryForm({ initial, onSave, onCancel }) {
             maxLength="7"
             value={draft.periodFrom}
             onChange={(e) => {
-              const val = e.target.value.replace(/[^\d-]/g, '');
-              setDraft((d) => ({ ...d, periodFrom: val }));
-            }}
-            onBlur={(e) => {
-              const val = e.target.value.replace(/[^\d-]/g, '');
-              if (val.length >= 4 && val[4] !== '-' && val.length > 4) {
-                const formatted = val.slice(0, 4) + '-' + val.slice(4, 6);
-                setDraft((d) => ({ ...d, periodFrom: formatted }));
+              let val = e.target.value.replace(/[^\d-]/g, '');
+              // Автоматично додаємо дефіс після 4 цифр
+              if (val.length === 4 && !val.includes('-')) {
+                val = val + '-';
               }
+              // Валідація місяця (01-12)
+              if (val.length === 7) {
+                const month = parseInt(val.slice(5, 7));
+                if (month > 12 || month < 1) {
+                  return; // Не оновлюємо стан з невалідним місяцем
+                }
+              }
+              setDraft((d) => ({ ...d, periodFrom: val }));
             }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
           />
@@ -127,15 +131,19 @@ function JobEntryForm({ initial, onSave, onCancel }) {
             value={draft.periodTo}
             disabled={draft.current}
             onChange={(e) => {
-              const val = e.target.value.replace(/[^\d-]/g, '');
-              setDraft((d) => ({ ...d, periodTo: val }));
-            }}
-            onBlur={(e) => {
-              const val = e.target.value.replace(/[^\d-]/g, '');
-              if (val.length >= 4 && val[4] !== '-' && val.length > 4) {
-                const formatted = val.slice(0, 4) + '-' + val.slice(4, 6);
-                setDraft((d) => ({ ...d, periodTo: formatted }));
+              let val = e.target.value.replace(/[^\d-]/g, '');
+              // Автоматично додаємо дефіс після 4 цифр
+              if (val.length === 4 && !val.includes('-')) {
+                val = val + '-';
               }
+              // Валідація місяця (01-12)
+              if (val.length === 7) {
+                const month = parseInt(val.slice(5, 7));
+                if (month > 12 || month < 1) {
+                  return; // Не оновлюємо стан з невалідним місяцем
+                }
+              }
+              setDraft((d) => ({ ...d, periodTo: val }));
             }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"
           />

@@ -6,16 +6,20 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 async function postJson(path, body) {
+  console.log(`[API] POST ${path}`, body);
   try {
     const res = await fetch(`${API_BASE}${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
+    console.log(`[API] ${path} response status:`, res.status);
     if (!res.ok) throw new Error(`API ${path} responded with ${res.status}`);
-    return await res.json();
+    const data = await res.json();
+    console.log(`[API] ${path} success:`, data);
+    return data;
   } catch (err) {
-    console.warn(`[api] ${path} failed:`, err.message);
+    console.error(`[API] ${path} failed:`, err.message);
     return null;
   }
 }

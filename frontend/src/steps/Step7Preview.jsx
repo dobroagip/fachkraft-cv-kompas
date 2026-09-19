@@ -12,11 +12,16 @@ export default function Step7Preview({ data, onDownloaded }) {
   const noEducation = data.educationEntries.length === 0;
 
   const handleDownload = () => {
-    printResume();
-    // Ми не можемо на 100% дізнатися, чи справді відбувся друк/збереження
-    // (window.print() асинхронний і по-різному поводиться між браузерами),
-    // тому фіксуємо намір одразу — це достатньо точно для звіту гранту.
-    onDownloaded();
+    console.log('[Step7] Starting download...');
+    try {
+      printResume();
+      console.log('[Step7] window.print() called');
+      // Викликаємо onDownloaded одразу, щоб показати feedback форму
+      onDownloaded();
+    } catch (err) {
+      console.error('[Step7] Print failed:', err);
+      alert('Помилка при завантаженні. Спробуйте "інший спосіб" нижче.');
+    }
   };
 
   const handleFallbackDownload = async () => {
