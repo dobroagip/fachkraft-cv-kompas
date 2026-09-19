@@ -96,23 +96,39 @@ function JobEntryForm({ initial, onSave, onCancel }) {
         <label className="block">
           <span className="text-sm font-medium text-navy-900">{t.periodFrom}</span>
           <input
-            type="month"
-            min={MIN_MONTH_VALUE}
-            max={currentMonthValue()}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9-]*"
+            placeholder="2020-06"
+            maxLength="7"
             value={draft.periodFrom}
-            onChange={(e) => setDraft((d) => ({ ...d, periodFrom: e.target.value }))}
+            onChange={(e) => {
+              let val = e.target.value.replace(/[^\d-]/g, '');
+              if (val.length >= 4 && val[4] !== '-' && val.length > 4) {
+                val = val.slice(0, 4) + '-' + val.slice(4);
+              }
+              setDraft((d) => ({ ...d, periodFrom: val.slice(0, 7) }));
+            }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
           />
         </label>
         <label className="block">
           <span className="text-sm font-medium text-navy-900">{t.periodTo}</span>
           <input
-            type="month"
-            min={MIN_MONTH_VALUE}
-            max={currentMonthValue()}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9-]*"
+            placeholder="2023-12"
+            maxLength="7"
             value={draft.periodTo}
             disabled={draft.current}
-            onChange={(e) => setDraft((d) => ({ ...d, periodTo: e.target.value }))}
+            onChange={(e) => {
+              let val = e.target.value.replace(/[^\d-]/g, '');
+              if (val.length >= 4 && val[4] !== '-' && val.length > 4) {
+                val = val.slice(0, 4) + '-' + val.slice(4);
+              }
+              setDraft((d) => ({ ...d, periodTo: val.slice(0, 7) }));
+            }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"
           />
         </label>

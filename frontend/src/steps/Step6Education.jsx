@@ -209,27 +209,27 @@ function EducationEntryForm({ initial, onSave, onCancel }) {
             <label className="block">
               <span className="text-sm font-medium text-navy-900">{t.periodFrom}</span>
               <input
-                type="number"
+                type="text"
                 inputMode="numeric"
+                pattern="[0-9]*"
                 placeholder="2018"
-                min={MIN_PERIOD_YEAR}
-                max={getCurrentYear()}
+                maxLength="4"
                 value={draft.periodFrom}
-                onChange={(e) => setDraft((d) => ({ ...d, periodFrom: e.target.value.slice(0, 4) }))}
+                onChange={(e) => setDraft((d) => ({ ...d, periodFrom: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
                 className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
               />
             </label>
             <label className="block">
               <span className="text-sm font-medium text-navy-900">{t.periodTo}</span>
               <input
-                type="number"
+                type="text"
                 inputMode="numeric"
+                pattern="[0-9]*"
                 placeholder="2022"
-                min={MIN_PERIOD_YEAR}
-                max={getCurrentYear()}
+                maxLength="4"
                 value={draft.periodTo}
                 disabled={draft.current}
-                onChange={(e) => setDraft((d) => ({ ...d, periodTo: e.target.value.slice(0, 4) }))}
+                onChange={(e) => setDraft((d) => ({ ...d, periodTo: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
                 className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"
               />
             </label>
