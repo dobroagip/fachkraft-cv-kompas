@@ -53,7 +53,7 @@ export default function Step1Personal({ personal, updatePersonal }) {
         мають бути латиницею — так само, як у закордонному паспорті.
         Натисніть «Транслітерувати», щоб перевести написане автоматично.
       </div>
-      <div className="rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2.5 text-xs text-navy-600">
+      <div className="rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2.5 text-xs text-navy-700">
         🔒 {UI.privacyNotice}
       </div>
       <div className="grid grid-cols-1 gap-4">
@@ -119,21 +119,34 @@ export default function Step1Personal({ personal, updatePersonal }) {
             </button>
           );
         })()}
-        <PhoneField label={t.phone} value={personal.phone} onChange={(v) => updatePersonal('phone', v)} />
+                <PhoneField label={t.phone} value={personal.phone} onChange={(v) => updatePersonal('phone', v)} />
         <Field label={t.email} placeholder={t.emailPlaceholder} type="email" value={personal.email} onChange={(v) => updatePersonal('email', v)} />
       </div>
+      {(() => {
+        const missing = getStep1MissingFields(personal);
+        if (missing.length === 0) return null;
+        return (
+          <p className="text-xs text-navy-400">
+            Щоб перейти далі, заповніть: {missing.join(', ')}.
+          </p>
+        );
+      })()}
     </div>
   );
 }
 
+export function getStep1MissingFields(personal) {
+  const missing = [];
+  if (!personal.firstName.trim()) missing.push("ім'я");
+  if (!personal.lastName.trim()) missing.push('прізвище');
+  if (!isPlausibleBirthDate(personal.birthDate)) missing.push('коректна дата народження');
+  if (!/^\d{4}$/.test(personal.postalCode)) missing.push('поштовий індекс (4 цифри)');
+  if (!isPlausibleCityName(personal.city)) missing.push('коректний населений пункт (латиницею)');
+  if (!personal.phone.trim()) missing.push('телефон');
+  if (!personal.email.trim()) missing.push('email');
+  return missing;
+}
+
 export function isStep1Valid(personal) {
-  return Boolean(
-    personal.firstName.trim() &&
-    personal.lastName.trim() &&
-    isPlausibleBirthDate(personal.birthDate) &&
-    /^\d{4}$/.test(personal.postalCode) &&
-    isPlausibleCityName(personal.city) &&
-    personal.phone.trim() &&
-    personal.email.trim()
-  );
+  return getStep1MissingFields(personal).length === 0;
 }
