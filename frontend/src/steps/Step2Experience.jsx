@@ -4,7 +4,8 @@ import { EXPERIENCE_OPTIONS } from '../data/options';
 import { UI } from '../i18n/strings';
 import { formatPeriod } from '../utils/formatPeriod';
 import { transliterate } from '../utils/transliterate';
-import { isPlausibleMonthValue, currentMonthValue, MIN_PERIOD_YEAR } from '../utils/period';
+import { isPlausibleMonthValue } from '../utils/period';
+import MonthYearField from '../components/MonthYearField';
 import { hapticImpact } from '../telegram';
 
 const EMPTY_DRAFT = {
@@ -15,8 +16,6 @@ const EMPTY_DRAFT = {
   current: false,
   duties: []
 };
-
-const MIN_MONTH_VALUE = `${MIN_PERIOD_YEAR}-01`;
 
 function JobEntryForm({ initial, onSave, onCancel }) {
   const t = UI.step2;
@@ -92,39 +91,18 @@ function JobEntryForm({ initial, onSave, onCancel }) {
         )}
       </label>
 
-      <div className="grid grid-cols-2 gap-3">
-        <label className="block">
-          <span className="text-sm font-medium text-navy-900">{t.periodFrom}</span>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="2020-06"
-            maxLength="7"
-            value={draft.periodFrom}
-            onChange={(e) => {
-              const val = e.target.value;
-              setDraft((d) => ({ ...d, periodFrom: val }));
-            }}
-            className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
-          />
-          <p className="text-xs text-navy-400 mt-1">Формат: РРРР-ММ (наприклад 2020-06)</p>
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-navy-900">{t.periodTo}</span>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="2023-12"
-            maxLength="7"
-            value={draft.periodTo}
-            disabled={draft.current}
-            onChange={(e) => {
-              const val = e.target.value;
-              setDraft((d) => ({ ...d, periodTo: val }));
-            }}
-            className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"
-          />
-        </label>
+            <div className="grid grid-cols-2 gap-3">
+        <MonthYearField
+          label={t.periodFrom}
+          value={draft.periodFrom}
+          onChange={(v) => setDraft((d) => ({ ...d, periodFrom: v }))}
+        />
+        <MonthYearField
+          label={t.periodTo}
+          value={draft.periodTo}
+          disabled={draft.current}
+          onChange={(v) => setDraft((d) => ({ ...d, periodTo: v }))}
+        />
       </div>
 
       <label className="flex items-center gap-2 text-sm text-navy-900">
