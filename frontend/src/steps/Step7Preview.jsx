@@ -6,33 +6,35 @@ import { printResume, downloadResumeAsImage } from '../utils/exportPdf';
 
 export default function Step7Preview({ data, onDownloaded }) {
   const t = UI.step7;
-  const [fallbackBusy, setFallbackBusy] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const noExperience = data.experienceEntries.length === 0;
   const noEducation = data.educationEntries.length === 0;
 
-  const handleDownload = () => {
-    console.log('[Step7] Starting download...');
+  const handleDownload = async () => {
+    console.log('[Step7] Starting PDF download via jsPDF...');
+    setDownloading(true);
     try {
-      printResume();
-      console.log('[Step7] window.print() called');
-      // Викликаємо onDownloaded одразу, щоб показати feedback форму
+      await downloadResumeAsImage('cv-print-root', 'Lebenslauf.pdf');
+      console.log('[Step7] PDF downloaded successfully');
       onDownloaded();
     } catch (err) {
-      console.error('[Step7] Print failed:', err);
-      alert('Помилка при завантаженні. Спробуйте "інший спосіб" нижче.');
+      console.error('[Step7] PDF download failed:', err);
+      alert('Помилка при завантаженні PDF. Спробуйте інший спосіб нижче або оновіть сторінку.');
+    } finally {
+      setDownloading(false);
     }
   };
 
-  const handleFallbackDownload = async () => {
-    setFallbackBusy(true);
+  const handlePrintFallback = () => {
+    console.log('[Step7] Trying window.print() fallback...');
     try {
-      await downloadResumeAsImage('cv-print-root', 'Lebenslauf.pdf');
+      printResume();
+      console.log('[Step7] window.print() called');
       onDownloaded();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setFallbackBusy(false);
+    } catch (err) {
+      console.error('[Step7] Print failed:', err);
+      alert('Помилка при друку. Спробуйте основну кнопку "Завантажити PDF".');
     }
   };
 
@@ -81,18 +83,18 @@ export default function Step7Preview({ data, onDownloaded }) {
           <button
             type="button"
             onClick={handleDownload}
-            className="w-full rounded-xl bg-amber-600 px-5 py-3.5 text-sm font-semibold text-white hover:bg-amber-700 active:scale-[0.98] transition-all"
+            disabled={downloading}
+            className="w-full rounded-xl bg-amber-600 px-5 py-3.5 text-sm font-semibold text-white hover:bg-amber-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-wait"
           >
-            {UI.downloadPdf}
+            {downloading ? 'Генерація PDF...' : UI.downloadPdf}
           </button>
         )}
-                <button
+        <button
           type="button"
-          onClick={handleFallbackDownload}
-          disabled={fallbackBusy}
-          className="w-full text-xs text-navy-400 underline underline-offset-2 disabled:opacity-50"
+          onClick={handlePrintFallback}
+          className="w-full text-xs text-navy-400 underline underline-offset-2 hover:text-navy-600"
         >
-          {fallbackBusy ? '…' : 'Не вдалося зберегти? Спробувати інший спосіб'}
+          Альтернативний спосіб: відкрити діалог друку
         </button>
         <p className="text-center text-[11px] text-navy-400">🔒 {UI.privacyNotice}</p>
       </div>

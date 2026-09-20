@@ -98,51 +98,28 @@ function JobEntryForm({ initial, onSave, onCancel }) {
           <input
             type="text"
             inputMode="numeric"
-            pattern="[0-9-]*"
             placeholder="2020-06"
             maxLength="7"
             value={draft.periodFrom}
             onChange={(e) => {
-              let val = e.target.value.replace(/[^\d-]/g, '');
-              // Автоматично додаємо дефіс після 4 цифр
-              if (val.length === 4 && !val.includes('-')) {
-                val = val + '-';
-              }
-              // Валідація місяця (01-12)
-              if (val.length === 7) {
-                const month = parseInt(val.slice(5, 7));
-                if (month > 12 || month < 1) {
-                  return; // Не оновлюємо стан з невалідним місяцем
-                }
-              }
+              const val = e.target.value;
               setDraft((d) => ({ ...d, periodFrom: val }));
             }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600"
           />
+          <p className="text-xs text-navy-400 mt-1">Формат: РРРР-ММ (наприклад 2020-06)</p>
         </label>
         <label className="block">
           <span className="text-sm font-medium text-navy-900">{t.periodTo}</span>
           <input
             type="text"
             inputMode="numeric"
-            pattern="[0-9-]*"
             placeholder="2023-12"
             maxLength="7"
             value={draft.periodTo}
             disabled={draft.current}
             onChange={(e) => {
-              let val = e.target.value.replace(/[^\d-]/g, '');
-              // Автоматично додаємо дефіс після 4 цифр
-              if (val.length === 4 && !val.includes('-')) {
-                val = val + '-';
-              }
-              // Валідація місяця (01-12)
-              if (val.length === 7) {
-                const month = parseInt(val.slice(5, 7));
-                if (month > 12 || month < 1) {
-                  return; // Не оновлюємо стан з невалідним місяцем
-                }
-              }
+              const val = e.target.value;
               setDraft((d) => ({ ...d, periodTo: val }));
             }}
             className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3 py-2.5 text-navy-900 outline-none focus:border-amber-600 disabled:bg-navy-50 disabled:text-navy-400"

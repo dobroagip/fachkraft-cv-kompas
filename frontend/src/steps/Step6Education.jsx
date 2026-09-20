@@ -59,20 +59,20 @@ function SpecialtySelect({ value, onChange }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-1.5">
         <span className="text-sm font-medium text-navy-900">{t.specialty}</span>
         <div className="flex rounded-lg border border-navy-100 overflow-hidden text-[11px]">
           <button
             type="button"
             onClick={() => setMode('list')}
-            className={`px-2.5 py-1 ${mode === 'list' ? 'bg-amber-600 text-white' : 'bg-white text-navy-500'}`}
+            className={`px-2.5 py-1 transition-colors ${mode === 'list' ? 'bg-amber-600 text-white' : 'bg-white text-navy-500'}`}
           >
             Зі списку
           </button>
           <button
             type="button"
             onClick={() => setMode('manual')}
-            className={`px-2.5 py-1 ${mode === 'manual' ? 'bg-amber-600 text-white' : 'bg-white text-navy-500'}`}
+            className={`px-2.5 py-1 transition-colors ${mode === 'manual' ? 'bg-amber-600 text-white' : 'bg-white text-navy-500'}`}
           >
             Вручну
           </button>
@@ -82,7 +82,7 @@ function SpecialtySelect({ value, onChange }) {
       {mode === 'list' ? (
         <>
           {value && isKnownOption ? (
-            <div className="mt-1.5 flex items-center justify-between rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5">
+            <div className="flex items-center justify-between rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5">
               <span className="text-sm text-navy-900">
                 {SPECIALTY_OPTIONS.find((o) => o.de === value)?.ua} — <b>{value}</b>
               </span>
@@ -101,19 +101,25 @@ function SpecialtySelect({ value, onChange }) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={t.specialtySearchPlaceholder}
-                className="mt-1.5 w-full rounded-xl border border-navy-100 bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-navy-400/60 outline-none focus:border-amber-600"
+                className="w-full rounded-xl border border-navy-100 bg-white px-3.5 py-2.5 text-navy-900 placeholder:text-navy-400/60 outline-none focus:border-amber-600"
               />
               <div className="mt-2 flex flex-wrap gap-2">
-                {matches.map((o) => (
-                  <button
-                    key={o.de}
-                    type="button"
-                    onClick={() => onChange(o.de)}
-                    className="rounded-full border border-navy-100 bg-white px-3 py-1.5 text-xs text-navy-700 hover:border-amber-400"
-                  >
-                    {o.ua} <span className="text-navy-400">· {o.de}</span>
-                  </button>
-                ))}
+                {matches.length > 0 ? (
+                  matches.map((o) => (
+                    <button
+                      key={o.de}
+                      type="button"
+                      onClick={() => onChange(o.de)}
+                      className="rounded-full border border-navy-100 bg-white px-3 py-1.5 text-xs text-navy-700 hover:border-amber-400 transition-colors"
+                    >
+                      {o.ua} <span className="text-navy-400">· {o.de}</span>
+                    </button>
+                  ))
+                ) : (
+                  <p className="text-xs text-navy-400 w-full text-center py-2">
+                    Нічого не знайдено. Спробуйте режим "Вручну" →
+                  </p>
+                )}
               </div>
             </>
           )}
